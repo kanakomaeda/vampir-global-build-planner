@@ -105,7 +105,7 @@ a:hover{color:#f0d5a4;border-color:#c6a777}
 
 </style></head><body><main class="wrap">
 <header class="hero"><div class="kicker">VAMPIR • CLASS BUILD TOOL</div><p id="heroDesc">Build reference for VAMPIR classes. Select a class, configure Discipline slots, and keep your own build choices. Stat options shown here are explicitly labeled by chapter and source.</p><div class="pills"><span class="pill">Chapters 1–6 data</span><span class="pill">5 classes</span><span class="pill">4 Discipline effects</span><span class="pill">Builds saved in this browser</span></div></header>
-<nav class="tabs" aria-label="Choose class" id="classTabs"></nav>
+
 <section id="classHome" class="class-home">
   <h2 id="classHomeTitle">Akasha Features</h2>
   <p class="sub">Choose a tool for this class. Class-specific DPS rankings are not shown unless supported by reliable evidence.</p>
@@ -491,7 +491,7 @@ function importBuilds(file){
  reader.readAsText(file);
 }
 function render(){
-  renderTabs();
+
   renderClassArtwork();
 
   document.getElementById('heroDesc').textContent='Explore VAMPIR Global’s classes, game systems, and build-planning features.';
