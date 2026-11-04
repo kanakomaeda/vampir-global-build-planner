@@ -82,6 +82,14 @@ a:hover{color:#f0d5a4;border-color:#c6a777}
 @media(max-width:760px){.advisor-lock-grid{grid-template-columns:1fr}.tabs{grid-template-columns:repeat(2,1fr)}.tab:last-child{grid-column:span 2}.wrap{padding:18px 13px 46px}}
 @media(max-width:600px){.hero{padding:23px 19px}.hero p{font-size:16px}.tabs{gap:8px}.tab{min-height:64px;gap:7px}.class-icon{width:38px;height:38px;flex-basis:38px}.tab span{font-size:10px}.card{padding:15px}}
 
+.class-artwork-gallery{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin:18px 0 22px}
+.class-artwork-card{display:flex;flex-direction:column;gap:8px;min-width:0;padding:10px;text-align:center;text-transform:none;letter-spacing:0;background:linear-gradient(145deg,#211519,#0d0b0c);border:1px solid #49343a}
+.class-artwork-card img{display:block;width:100%;height:190px;object-fit:contain;object-position:center bottom;background:radial-gradient(ellipse at 50% 80%,#4b1722 0,#130c10 60%,#080809 100%);border:1px solid #3c292e}
+.class-artwork-card strong{font:700 12px Cinzel,serif;letter-spacing:.06em;color:#eee5e1}
+.class-artwork-card[aria-pressed=true]{border-color:#c09a70;box-shadow:inset 0 0 0 1px #a63c4933,0 0 18px #a52a3b22;background:linear-gradient(135deg,#35141c,#160e11)}
+.class-artwork-card:hover{border-color:#a66a70;transform:translateY(-2px)}
+@media(max-width:760px){.class-artwork-gallery{grid-template-columns:repeat(3,minmax(0,1fr))}.class-artwork-card img{height:150px}}
+@media(max-width:480px){.class-artwork-gallery{grid-template-columns:repeat(2,minmax(0,1fr))}.class-artwork-card img{height:145px}}
 .catalog-gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(205px,1fr));gap:12px;margin:16px 0}
 .catalog-item-card{display:flex;align-items:center;gap:11px;text-align:left;text-transform:none;letter-spacing:0;min-height:94px;padding:10px;background:linear-gradient(145deg,#1b1517,#0d0b0c);border:1px solid #49343a}
 .catalog-item-card img{width:68px;height:68px;flex:0 0 68px;object-fit:contain;background:#080809;border:1px solid #594047;padding:3px}
@@ -101,6 +109,7 @@ a:hover{color:#f0d5a4;border-color:#c6a777}
 <section id="classHome" class="class-home">
   <h2 id="classHomeTitle">Akasha Features</h2>
   <p class="sub">Choose a tool for this class. Class-specific DPS rankings are not shown unless supported by reliable evidence.</p>
+  <div id="classArtworkGallery" class="class-artwork-gallery" aria-label="Official VAMPIR class artwork"></div>
   <div class="feature-grid" id="featureGrid"></div>
 </section>
 <section id="characterStatsView" class="class-home" hidden>
@@ -254,6 +263,7 @@ function persistState(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify({act
 try{const saved=JSON.parse(localStorage.getItem(STORAGE_KEY)||'null');if(saved&&classes.includes(saved.active))active=saved.active;if(saved&&Number.isInteger(saved.selectedChapter)&&saved.selectedChapter>=1&&saved.selectedChapter<=6)selectedChapter=saved.selectedChapter;if(saved&&saved.builds)Object.assign(builds,saved.builds)}catch(e){}
 data=makeChapterData(selectedChapter);ensureBuild();
 const root=document.getElementById('effects');
+function renderClassArtwork(){const gallery=document.getElementById('classArtworkGallery');if(!gallery)return;gallery.innerHTML='';classes.forEach(c=>{const card=document.createElement('button');card.type='button';card.className='class-artwork-card';card.setAttribute('aria-pressed',String(c===active));card.setAttribute('aria-label','Select '+c);const img=document.createElement('img');img.src=CLASS_ICONS[c];img.alt=c+' official VAMPIR class artwork';img.loading='lazy';img.decoding='async';img.addEventListener('error',()=>{img.alt='Official artwork unavailable for '+c;img.style.display='none'},{once:true});const label=document.createElement('strong');label.textContent=c;card.append(img,label);card.addEventListener('click',()=>{if(c===active)return;saveCurrent();active=c;activeFeature=null;render()});gallery.appendChild(card)})}
 function renderTabs(){const nav=document.getElementById('classTabs');nav.innerHTML='';classes.forEach(c=>{const b=document.createElement('button');b.className='tab'+(c===active?' active':'');b.innerHTML='<img class="class-icon" src="'+CLASS_ICONS[c]+'" alt="" loading="lazy" decoding="async"><span>'+c+'</span>';const icon=b.querySelector('img');icon.addEventListener('error',()=>{icon.style.display='none'},{once:true});b.setAttribute('aria-pressed',String(c===active));b.addEventListener('click',()=>{saveCurrent();active=c;activeFeature=null;render()});nav.appendChild(b)})}
 function saveCurrent(){data.forEach((e,i)=>e.slots.forEach((s,j)=>{const el=document.getElementById('s'+i+'_'+j);if(el)builds[buildKey()][i][j]=el.selectedIndex}));persistState()}
 function renderEffects(){root.innerHTML='';data.forEach((e,i)=>{const card=document.createElement('section');card.className='card';card.innerHTML='<div class="tag">Discipline '+(i+1)+'</div><h3>'+e.name+'</h3>';e.slots.forEach((s,j)=>{const wrap=document.createElement('div');wrap.className='slot';const label=document.createElement('label');label.textContent=s.label;const sel=document.createElement('select');sel.id='s'+i+'_'+j;s.opts.forEach((o,k)=>{const op=document.createElement('option');op.value=o;const rate=selectedChapter===1?chapter1Rate(i,j,o):(s.probabilities||[])[k];op.textContent=o+(rate===null||rate===undefined?'':' — '+rate+'%');sel.appendChild(op)});sel.selectedIndex=builds[buildKey()][i][j]??0;sel.addEventListener('change',()=>{builds[buildKey()][i][j]=sel.selectedIndex;update();renderBuildFeedback();renderComparison()});wrap.append(label,sel);card.appendChild(wrap)});const effect=document.createElement('div');effect.className='effect';effect.textContent=e.effect;card.appendChild(effect);root.appendChild(card)})}
@@ -482,6 +492,7 @@ function importBuilds(file){
 }
 function render(){
   renderTabs();
+  renderClassArtwork();
 
   document.getElementById('heroDesc').textContent='Explore VAMPIR Global’s classes, game systems, and build-planning features.';
   document.getElementById('classHomeTitle').textContent=active+' Features';
