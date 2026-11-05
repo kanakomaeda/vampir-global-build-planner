@@ -805,7 +805,7 @@ renderAbsolute();
  }
  select.value=localStorage.getItem('vampir-language')||'en';
  select.addEventListener('change',()=>{localStorage.setItem('vampir-language',select.value);apply();});
- const observer=new MutationObserver(records=>records.forEach(record=>{record.addedNodes.forEach(n=>{if(n.nodeType===Node.TEXT_NODE){const lang=select.value,dict=languages[lang]||{};const original=n.nodeValue.trim();if(dict[original])n.nodeValue=n.nodeValue.replace(original,dict[original]);}else if(n.nodeType===Node.ELEMENT_NODE)apply(n);});}));
+ const observer=new MutationObserver(records=>records.forEach(record=>record.addedNodes.forEach(n=>{if(n.nodeType===Node.TEXT_NODE){if(n.parentElement)apply(n.parentElement);}else if(n.nodeType===Node.ELEMENT_NODE)apply(n);})));
  observer.observe(document.body,{childList:true,subtree:true});
  apply();
 })();
