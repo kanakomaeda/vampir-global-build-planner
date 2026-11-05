@@ -366,10 +366,10 @@ function renderClassArtwork(){
     player.className='class-artwork-video';
     player.src=video.src;
     player.poster=video.poster;
-    player.autoplay=true;
+    player.autoplay=!activeFeature;
     player.controls=false;
     player.playsInline=true;
-    player.preload='auto';
+    player.preload=activeFeature?'none':'auto';
     player.volume=1;
     player.muted=false;
     player.addEventListener('volumechange',()=>{if(player.volume!==1)player.volume=1;if(player.muted)player.muted=false;});
@@ -378,8 +378,12 @@ function renderClassArtwork(){
      if(!note){note=document.createElement('a');note.className='class-video-inline-error';note.textContent='Video unavailable — open directly';note.href=video.src;note.target='_blank';note.rel='noopener noreferrer';note.addEventListener('click',e=>e.stopPropagation());card.appendChild(note);}
     });
     card.appendChild(player);
-    const playAttempt=player.play();
-    if(playAttempt&&typeof playAttempt.catch==='function')playAttempt.catch(()=>{player.controls=true;});
+    if(!activeFeature){
+     const playAttempt=player.play();
+     if(playAttempt&&typeof playAttempt.catch==='function')playAttempt.catch(()=>{player.controls=true;});
+    }else{
+     player.pause();
+    }
    }
    const title=document.createElement('strong');
    title.textContent=c;
