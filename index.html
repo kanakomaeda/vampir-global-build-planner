@@ -1251,7 +1251,7 @@ renderAbsolute();
    else if(lastTranslatedNodes.has(node)&&node.nodeValue!==lastTranslatedNodes.get(node))originals.set(node,node.nodeValue);
    const original=originals.get(node);
    let translated=original;
-   Object.keys(dict).sort((a,b)=>b.length-a.length).forEach(key=>{if(!key)return;const escaped=key.replace(/[.*+?^${}()|[\\]\\\\]/g,'\\\\$&');const pattern=new RegExp('(^|[^A-Za-z])'+escaped+'(?=$|[^A-Za-z])','g');translated=translated.replace(pattern,(_,prefix)=>prefix+dict[key]);});
+   Object.keys(dict).sort((a,b)=>b.length-a.length).forEach(key=>{if(!key)return;if(key==='Add'){translated=translated.replace(/(^|[^A-Za-z])Add(?=$|[^A-Za-z])/g,(_,prefix)=>prefix+dict[key]);}else if(translated.includes(key))translated=translated.split(key).join(dict[key]);});
    if(node.nodeValue!==translated)node.nodeValue=translated;
    lastTranslatedNodes.set(node,translated);
   }
@@ -1267,7 +1267,7 @@ renderAbsolute();
     if(!(attr in saved))saved[attr]=el.getAttribute(attr);
     else if(saved[attr+'__translated']!==undefined&&el.getAttribute(attr)!==saved[attr+'__translated'])saved[attr]=el.getAttribute(attr);
     const original=saved[attr];let translated=original;
-    Object.keys(dict).sort((a,b)=>b.length-a.length).forEach(key=>{if(!key)return;const escaped=key.replace(/[.*+?^${}()|[\\]\\\\]/g,'\\\\$&');const pattern=new RegExp('(^|[^A-Za-z])'+escaped+'(?=$|[^A-Za-z])','g');translated=translated.replace(pattern,(_,prefix)=>prefix+dict[key]);});
+    Object.keys(dict).sort((a,b)=>b.length-a.length).forEach(key=>{if(!key)return;if(key==='Add'){translated=translated.replace(/(^|[^A-Za-z])Add(?=$|[^A-Za-z])/g,(_,prefix)=>prefix+dict[key]);}else if(translated.includes(key))translated=translated.split(key).join(dict[key]);});
     if(el.getAttribute(attr)!==translated)el.setAttribute(attr,translated);
     saved[attr+'__translated']=translated;
    }
