@@ -734,7 +734,7 @@ function renderCatalogWeaponDetails(){
  const layout=document.createElement('div');layout.className='catalog-detail-layout';
  const img=document.createElement('img');img.className='catalog-detail-image';img.src=WEAPON_IMAGES[item.imageFile]||'';img.alt=item.name+' image';img.loading='lazy';
  const copy=document.createElement('div');copy.className='catalog-detail-copy';
- const lines=String(item.details||'').split(/\\r?\\n/).map(x=>x.trim()).filter(Boolean).filter(x=>!/^Image file:?/i.test(x));
+ const rawDetails=String(item.details||'').replace(/\\r\\n?/g,'\n');const lines=rawDetails.split('\n').flatMap(part=>part.split(String.fromCharCode(92)+'n')).map(x=>x.trim()).filter(Boolean).filter(x=>!/^Image file:?/i.test(x));
  const heading=document.createElement('div');heading.className='catalog-detail-heading';
  const title=document.createElement('h3');title.textContent=item.name;heading.appendChild(title);
  const metaLine=lines.find(x=>/exclusive/i.test(x))||('Rarity: '+item.grade+' | Tier: '+item.tier);
