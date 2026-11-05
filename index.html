@@ -207,7 +207,7 @@ a:hover{color:#f0d5a4;border-color:#c6a777}
         <div class="character-stat-row"><label for="catalogTier">Tier</label><select id="catalogTier"><option value="All">All tiers</option><option>T1</option><option>T2</option><option>T3</option><option>T4</option></select></div>
         <div class="character-stat-row"><label for="catalogWeapon">Global Item</label><select id="catalogWeapon"><option value="">No matching Global entries</option></select></div>
       </div>
-      <div class="note" id="catalogLegend"><strong>Legend</strong><br>Normal — karaniwang kulay ng stat.<br>Grayed out — kulay-abong stat na nakikita sa screenshot.<br>No refined substats — walang laman ang refined-substat slot ayon sa screenshot.</div><div id="catalogResultCount" class="catalog-count" aria-live="polite"></div><div id="catalogGallery" class="catalog-gallery" aria-label="Weapon inventory records"></div><div id="catalogWeaponDetails" class="summary" aria-live="polite">Select an item to view its supplied Global details.</div>
+      <div class="note" id="catalogLegend"><strong>Legend</strong><br>Normal — standard stat color.<br>Grayed out — stat shown in gray in the supplied screenshot.<br>No refined substats — the refined-substat slot is empty in the supplied screenshot.</div><div id="catalogResultCount" class="catalog-count" aria-live="polite"></div><div id="catalogGallery" class="catalog-gallery" aria-label="Weapon inventory records"></div><div id="catalogWeaponDetails" class="summary" aria-live="polite">Select an item to view its supplied Global details.</div>
     </section>
 
 </section>
@@ -583,6 +583,7 @@ function render(){
     document.getElementById('classStatus').textContent='';
     document.getElementById('chapterSelect').value=String(selectedChapter);renderEffects();renderGuide();renderCompareOptions();document.getElementById('selectedBuildTitle').textContent='Selected Chapter '+selectedChapter+' build';update();
   }
+  if(window.applyVampirTranslations)window.applyVampirTranslations();
 }
 document.getElementById('chapterSelect').addEventListener('change',()=>{saveCurrent();selectedChapter=Number(document.getElementById('chapterSelect').value);data=makeChapterData(selectedChapter);ensureBuild();persistState();render()});
 document.getElementById('compareClass').addEventListener('change',renderComparison);document.getElementById('compareChapter').addEventListener('change',renderComparison);document.getElementById('buildGoal').addEventListener('change',()=>{recommendBuild();renderBuildFeedback();renderComparison()});
@@ -889,8 +890,52 @@ renderAbsolute();
   "Rare":"Raro","Heroic":"Heroico","Legendary":"Lendário"
  });
 
+
+ // Complete class-specific headings and canonical equipment legend wording.
+ const classNames=['Akasha','Grim Reaper','Carnage','Bloodstained','Viper'];
+ const classTitleTranslations={
+  tl:{features:'Mga Feature ng',stats:'Mga Stat ng Character ni',equipment:'Tagaplano ng Kagamitan ni',discipline:'Configuration ng Discipline ni',legend:'Legend',normal:'Normal — karaniwang kulay ng stat.',gray:'Grayed out — stat na ipinapakita sa kulay-abo sa ibinigay na screenshot.',empty:'No refined substats — walang laman ang refined-substat slot sa ibinigay na screenshot.'},
+  id:{features:'Fitur',stats:'Stat Karakter',equipment:'Perencana Perlengkapan',discipline:'Konfigurasi Discipline',legend:'Keterangan',normal:'Normal — warna stat standar.',gray:'Grayed out — stat yang ditampilkan dalam warna abu-abu pada tangkapan layar yang diberikan.',empty:'No refined substats — slot refined substat kosong pada tangkapan layar yang diberikan.'},
+  th:{features:'ฟีเจอร์',stats:'ค่าสถานะตัวละคร',equipment:'วางแผนอุปกรณ์',discipline:'การตั้งค่า Discipline',legend:'คำอธิบายสัญลักษณ์',normal:'Normal — สีค่าสถานะมาตรฐาน',gray:'Grayed out — ค่าสถานะที่แสดงเป็นสีเทาในภาพหน้าจอที่ให้มา',empty:'No refined substats — ช่อง refined substat ว่างในภาพหน้าจอที่ให้มา'},
+  ja:{features:'の機能',stats:'のキャラクターステータス',equipment:'装備プランナー',discipline:'のDiscipline設定',legend:'凡例',normal:'Normal — 標準のステータス色。',gray:'Grayed out — 提供されたスクリーンショットで灰色表示されているステータス。',empty:'No refined substats — 提供されたスクリーンショットではRefined Substatスロットが空です。'},
+  'pt-BR':{features:'Recursos de',stats:'Atributos do Personagem',equipment:'Planejador de Equipamentos',discipline:'Configuração de Discipline',legend:'Legenda',normal:'Normal — cor padrão do atributo.',gray:'Grayed out — atributo exibido em cinza na captura de tela fornecida.',empty:'No refined substats — o espaço de refined substats está vazio na captura de tela fornecida.'},
+  'pt-PT':{features:'Funcionalidades de',stats:'Estatísticas da Personagem',equipment:'Planeador de Equipamento',discipline:'Configuração de Discipline',legend:'Legenda',normal:'Normal — cor habitual da estatística.',gray:'Grayed out — estatística apresentada a cinzento na captura de ecrã fornecida.',empty:'No refined substats — o espaço de refined substats está vazio na captura de ecrã fornecida.'}
+ };
+ for(const [locale,t] of Object.entries(classTitleTranslations)){
+  const dict=languages[locale];
+  for(const name of classNames){
+   dict[name+' Features']=locale==='ja'?name+t.features:t.features+' '+name;
+   dict[name+' Character Stats']=locale==='ja'?name+t.stats:t.stats+' '+name;
+   dict[name+' Equipment Planner']=locale==='ja'?name+t.equipment:t.equipment+' '+name;
+   dict[name+' Discipline configuration']=locale==='ja'?name+t.discipline:t.discipline+' '+name;
+  }
+  Object.assign(dict,{
+   'Explore VAMPIR Global’s classes, game systems, and build-planning features.':({
+    tl:'Tuklasin ang mga class, game system, at feature para sa pagpaplano ng build sa VAMPIR Global.',
+    id:'Jelajahi class, sistem game, dan fitur perencanaan build VAMPIR Global.',
+    th:'สำรวจคลาส ระบบเกม และฟีเจอร์วางแผนบิลด์ของ VAMPIR Global',
+    ja:'VAMPIR Globalのクラス、ゲームシステム、ビルド計画機能を確認できます。',
+    'pt-BR':'Explore as classes, os sistemas do jogo e os recursos de planejamento de builds de VAMPIR Global.',
+    'pt-PT':'Explore as classes, os sistemas de jogo e as funcionalidades de planeamento de builds de VAMPIR Global.'
+   })[locale],
+   'CLASS BUILD TOOL':({
+    tl:'TOOL PARA SA PAGBUO NG CLASS',
+    id:'ALAT BUILD CLASS',
+    th:'เครื่องมือสร้างบิลด์คลาส',
+    ja:'クラスビルドツール',
+    'pt-BR':'FERRAMENTA DE BUILD DE CLASSE',
+    'pt-PT':'FERRAMENTA DE BUILD DE CLASSE'
+   })[locale],
+   'Legend':t.legend,
+   'Normal — standard stat color.':t.normal,
+   'Grayed out — stat shown in gray in the supplied screenshot.':t.gray,
+   'No refined substats — the refined-substat slot is empty in the supplied screenshot.':t.empty
+  });
+ }
+
  const select=document.getElementById('languageSelect'); if(!select)return;
  const originals=new WeakMap();
+ const lastTranslatedNodes=new WeakMap();
  const originalAttributes=new WeakMap();
  function apply(root=document.body){
   const lang=select.value,dict=languages[lang]||{};
@@ -898,10 +943,12 @@ renderAbsolute();
   let node;while((node=walker.nextNode())){
    if(!node.nodeValue.trim())continue;
    if(!originals.has(node))originals.set(node,node.nodeValue);
-   const original=originals.get(node),trim=original.trim();
+   else if(lastTranslatedNodes.has(node)&&node.nodeValue!==lastTranslatedNodes.get(node))originals.set(node,node.nodeValue);
+   const original=originals.get(node);
    let translated=original;
    Object.keys(dict).sort((a,b)=>b.length-a.length).forEach(key=>{if(key&&translated.includes(key))translated=translated.split(key).join(dict[key]);});
-   node.nodeValue=translated;
+   if(node.nodeValue!==translated)node.nodeValue=translated;
+   lastTranslatedNodes.set(node,translated);
   }
   const attributeRoot=root.nodeType===Node.ELEMENT_NODE?root:null;
   const attributeElements=[];
@@ -913,17 +960,24 @@ renderAbsolute();
    for(const attr of ['aria-label','title','placeholder']){
     if(!el.hasAttribute(attr))continue;
     if(!(attr in saved))saved[attr]=el.getAttribute(attr);
+    else if(saved[attr+'__translated']!==undefined&&el.getAttribute(attr)!==saved[attr+'__translated'])saved[attr]=el.getAttribute(attr);
     const original=saved[attr];let translated=original;
     Object.keys(dict).sort((a,b)=>b.length-a.length).forEach(key=>{if(key&&translated.includes(key))translated=translated.split(key).join(dict[key]);});
-    el.setAttribute(attr,translated);
+    if(el.getAttribute(attr)!==translated)el.setAttribute(attr,translated);
+    saved[attr+'__translated']=translated;
    }
   });
   document.documentElement.lang=lang;
  }
  select.value=localStorage.getItem('vampir-language')||'en';
  select.addEventListener('change',()=>{localStorage.setItem('vampir-language',select.value);apply();});
- const observer=new MutationObserver(records=>records.forEach(record=>record.addedNodes.forEach(n=>{if(n.nodeType===Node.TEXT_NODE){if(n.parentElement)apply(n.parentElement);}else if(n.nodeType===Node.ELEMENT_NODE)apply(n);})));
- observer.observe(document.body,{childList:true,subtree:true});
+ window.applyVampirTranslations=()=>apply();
+ const observer=new MutationObserver(records=>records.forEach(record=>{
+  if(record.type==='childList')record.addedNodes.forEach(n=>{if(n.nodeType===Node.TEXT_NODE){if(n.parentElement)apply(n.parentElement);}else if(n.nodeType===Node.ELEMENT_NODE)apply(n);});
+  else if(record.type==='characterData'&&record.target.parentElement)apply(record.target.parentElement);
+  else if(record.type==='attributes')apply(record.target);
+ }));
+ observer.observe(document.body,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['aria-label','title','placeholder']});
  apply();
 })();
 </script></body></html>
