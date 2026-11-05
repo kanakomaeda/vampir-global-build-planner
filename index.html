@@ -728,7 +728,14 @@ const WEAPON_IMAGES={"030908.png":"data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQ
 function getCatalogMatches(){const category=catalogType.value,grade=catalogGrade.value,tier=catalogTier.value,cls=active;return verifiedGlobalEquipment.filter(x=>x.category===category&&x.class===cls&&(grade==='All'||x.grade===grade)&&(tier==='All'||x.tier===tier))}
 function renderCatalogWeaponOptions(){selectedCatalogIndex=0;const matches=getCatalogMatches();if(!matches.length){if(catalogDetails)catalogDetails.textContent='No equipment matches these filters.';if(catalogGallery)catalogGallery.innerHTML='';if(catalogResultCount)catalogResultCount.textContent='0 matching records';return;}renderCatalogWeaponDetails()}
 // Crafting material data is intentionally empty until verified Global recipes are available.
-const VERIFIED_CRAFTING_MATERIALS={};
+const VERIFIED_CRAFTING_MATERIALS={
+ '030908.png':[
+  {name:'Weapon Shard',quantity:100},
+  {name:'Ashen Crystal',quantity:250},
+  {name:'Peridot',quantity:3},
+  {name:'Gold',quantity:'100,000'}
+ ]
+};
 function renderCraftingMaterials(item){
  const prompt=document.getElementById('craftingMaterialsPrompt');
  const list=document.getElementById('craftingMaterialsList');
