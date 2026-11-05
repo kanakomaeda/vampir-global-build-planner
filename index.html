@@ -159,6 +159,11 @@ a:hover{color:#f0d5a4;border-color:#c6a777}
 .catalog-detail-line.is-muted{color:#8b929c!important}
 .catalog-detail-line.is-special{margin-top:3px!important;color:#263c61!important}
 @media(max-width:520px){.catalog-detail-layout{grid-template-columns:76px minmax(0,1fr)!important;gap:10px!important;padding:10px!important}.catalog-detail-image{max-width:76px!important}.catalog-detail-copy{font-size:11px!important}.catalog-detail-heading h3{font-size:13px!important}.catalog-detail-line{font-size:10.5px!important}}
+
+/* Keep equipment stats as real, visible bullet-list items. */
+.catalog-detail-lines{display:block!important;list-style-type:disc!important;list-style-position:outside!important;margin:7px 0 0!important;padding:0 0 0 20px!important}
+.catalog-detail-lines>.catalog-detail-line{display:list-item!important;list-style-type:disc!important;margin:0 0 3px!important;padding:0!important}
+.catalog-detail-lines>.catalog-detail-line::marker{color:#202633!important;font-size:1em!important}
 </style></head><body><main class="wrap">
 <header class="hero"><div class="kicker">VAMPIR • CLASS BUILD TOOL</div><p id="heroDesc">Build reference for VAMPIR classes. Select a class, configure Discipline slots, and keep your own build choices. Stat options shown here are explicitly labeled by chapter and source.</p><div class="pills"><span class="pill">Character Stats</span><span class="pill">5 classes</span><span class="pill">Equipment Planner</span><span class="pill">Builds saved in this browser</span></div></header>
 
