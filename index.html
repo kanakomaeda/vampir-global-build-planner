@@ -259,7 +259,7 @@ const profiles={
 'Viper':{guide:[],notes:[]}
 };
 const chapter1Data=data.map(e=>({name:e.name,effect:e.effect+' • 100%',slots:e.slots.map(s=>({...s,opts:s.opts.slice()}))}));
-let selectedChapter=1,active='Akasha';const builds={};
+let selectedChapter=1,active=null;const builds={};
 const STORAGE_KEY='vampir-discipline-planner-v3';
 const bonusByChapter={"2":["DEF +20","EVA +5","ATK +10","ACC +5"],"3":["EVA +5","ATK +10","ACC +5","DEF +20"],"4":["ATK +10","ACC +5","DEF +20","EVA +5"],"5":["ACC +5","DEF +20","EVA +5","ATK +10"],"6":["DEF +20","EVA +5","ATK +10","ACC +5"]};
 function optList(stat){const values=(/ACC|EVA/.test(stat))?[3,6,9]:[5,10,15];return values.map(v=>stat+' +'+v)}
@@ -328,7 +328,7 @@ data=makeChapterData(selectedChapter);
 function buildKey(){return active+'|chapter-'+selectedChapter}
 function ensureBuild(){const key=buildKey();if(!builds[key])builds[key]=data.map(e=>e.slots.map(s=>Math.min(s.def,s.opts.length-1)))}
 function persistState(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify({active,selectedChapter,builds}))}catch(e){}}
-try{const saved=JSON.parse(localStorage.getItem(STORAGE_KEY)||'null');if(saved&&classes.includes(saved.active))active=saved.active;if(saved&&Number.isInteger(saved.selectedChapter)&&saved.selectedChapter>=1&&saved.selectedChapter<=6)selectedChapter=saved.selectedChapter;if(saved&&saved.builds)Object.assign(builds,saved.builds)}catch(e){}
+try{const saved=JSON.parse(localStorage.getItem(STORAGE_KEY)||'null');/* Do not restore a previously selected class on page load; require an explicit class selection. */if(saved&&Number.isInteger(saved.selectedChapter)&&saved.selectedChapter>=1&&saved.selectedChapter<=6)selectedChapter=saved.selectedChapter;if(saved&&saved.builds)Object.assign(builds,saved.builds)}catch(e){}
 data=makeChapterData(selectedChapter);ensureBuild();
 const root=document.getElementById('effects');
 function renderClassArtwork(){const gallery=document.getElementById('classArtworkGallery');if(!gallery)return;gallery.innerHTML='';const classVideos={'Grim Reaper':{id:'XayNJKoB3pw',title:'VAMPIR Grim Reaper Class Introduction'},'Bloodstained':{id:'kG0duC2Dp88',title:'VAMPIR Bloodstained Class Introduction'},'Viper':{id:'d0Kfy_jWrjg',title:'VAMPIR Viper Class Introduction'},'Carnage':{id:'1xS7pl8jhB8',title:'VAMPIR Carnage Class Introduction'},'Akasha':{id:'Z2fqKgOjgE4',title:'VAMPIR Akasha Class Introduction'}};classes.forEach(c=>{const video=active===c?classVideos[c]:null;const card=document.createElement(video?'div':'button');if(!video)card.type='button';else{card.setAttribute('role','button');card.tabIndex=0}card.className='class-artwork-card';card.setAttribute('aria-pressed',String(c===active));card.setAttribute('aria-label','Select '+c);if(video){const frame=document.createElement('iframe');frame.className='class-artwork-video';frame.src='https://www.youtube-nocookie.com/embed/'+video.id+'?autoplay=1&mute=1&controls=0&disablekb=1&loop=1&playlist='+video.id+'&playsinline=1&rel=0&fs=0';frame.title=video.title;frame.allow='autoplay; encrypted-media';frame.setAttribute('tabindex','-1');frame.setAttribute('aria-label','Muted autoplaying '+c+' class introduction video');frame.setAttribute('loading','eager');frame.setAttribute('referrerpolicy','strict-origin-when-cross-origin');card.appendChild(frame)}else{const img=document.createElement('img');img.src=CLASS_ICONS[c];img.alt=c+' official VAMPIR class artwork';img.loading='lazy';img.decoding='async';img.addEventListener('error',()=>{img.alt='Official artwork unavailable for '+c;img.style.display='none'},{once:true});card.appendChild(img)}const label=document.createElement('strong');label.textContent=c;card.appendChild(label);const selectClass=()=>{if(c===active)return;saveCurrent();active=c;activeFeature=null;render();renderCatalogWeaponOptions()};card.addEventListener('click',selectClass);if(video)card.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();selectClass()}});gallery.appendChild(card)})}
@@ -563,18 +563,20 @@ function render(){
   renderClassArtwork();
 
   document.getElementById('heroDesc').textContent='Explore VAMPIR Global’s classes, game systems, and build-planning features.';
-  document.getElementById('classHomeTitle').textContent=active+' Features';
+  document.getElementById('classHomeTitle').textContent=active?active+' Features':'Select a Class';
   document.getElementById('classHome').hidden=!!activeFeature;
   document.getElementById('plannerView').hidden=activeFeature!=='discipline';
   document.getElementById('characterStatsView').hidden=activeFeature!=='character-stats';
   document.getElementById('equipmentView').hidden=activeFeature!=='equipment';
-  document.getElementById('equipmentTitle').textContent=active+' Equipment Planner';
-  document.getElementById('characterStatsTitle').textContent=active+' Character Stats';
+  document.getElementById('equipmentTitle').textContent=(active||'Class')+' Equipment Planner';
+  document.getElementById('characterStatsTitle').textContent=(active||'Class')+' Character Stats';
   if(!activeFeature){
-    document.getElementById('featureGrid').innerHTML='<button class="feature-card" id="openCharacterStats"><span class="feature-tag">AVAILABLE NOW</span><strong>Character Stats</strong><span>View and record your Default, Damage, Support, and Special stats.</span><span class="feature-arrow">Open character stats →</span></button><button class="feature-card" id="openEquipment"><span class="feature-tag">AVAILABLE NOW</span><strong>Equipment Planner</strong><span>Browse Global weapons and equipment separately from your character stat snapshot.</span><span class="feature-arrow">Open equipment planner →</span></button><button class="feature-card" id="openDiscipline"><span class="feature-tag">AVAILABLE NOW</span><strong>Discipline Planner</strong><span>Configure your four Discipline Effects and choose one stat for each slot.</span><span class="feature-arrow">Open planner →</span></button><div class="feature-card feature-soon"><span class="feature-tag">FEATURE HUB</span><strong>More features</strong><span>Additional tools and class-specific sections can be added here as the planner grows.</span><span class="feature-arrow">Coming as the hub expands</span></div>';
-    document.getElementById('openDiscipline').addEventListener('click',()=>{activeFeature='discipline';render()});
-    document.getElementById('openEquipment').addEventListener('click',()=>{activeFeature='equipment';renderCatalogWeaponOptions();render()});
-    document.getElementById('openCharacterStats').addEventListener('click',()=>{activeFeature='character-stats';setCharacterStatsTab('default');render()});
+    document.getElementById('featureGrid').innerHTML=active?'<button class="feature-card" id="openCharacterStats"><span class="feature-tag">AVAILABLE NOW</span><strong>Character Stats</strong><span>View and record your Default, Damage, Support, and Special stats.</span><span class="feature-arrow">Open character stats →</span></button><button class="feature-card" id="openEquipment"><span class="feature-tag">AVAILABLE NOW</span><strong>Equipment Planner</strong><span>Browse Global weapons and equipment separately from your character stat snapshot.</span><span class="feature-arrow">Open equipment planner →</span></button><button class="feature-card" id="openDiscipline"><span class="feature-tag">AVAILABLE NOW</span><strong>Discipline Planner</strong><span>Configure your four Discipline Effects and choose one stat for each slot.</span><span class="feature-arrow">Open planner →</span></button><div class="feature-card feature-soon"><span class="feature-tag">FEATURE HUB</span><strong>More features</strong><span>Additional tools and class-specific sections can be added here as the planner grows.</span><span class="feature-arrow">Coming as the hub expands</span></div>':'<div class="feature-card feature-soon"><span class="feature-tag">GET STARTED</span><strong>Select a class above</strong><span>Choose one of the five VAMPIR classes to view its available build-planning features.</span></div>';
+    if(active){
+      document.getElementById('openDiscipline').addEventListener('click',()=>{activeFeature='discipline';render()});
+      document.getElementById('openEquipment').addEventListener('click',()=>{activeFeature='equipment';renderCatalogWeaponOptions();render()});
+      document.getElementById('openCharacterStats').addEventListener('click',()=>{activeFeature='character-stats';setCharacterStatsTab('default');render()});
+    }
   }
   if(activeFeature==='discipline'){
     
