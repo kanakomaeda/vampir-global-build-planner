@@ -332,9 +332,9 @@ function renderClassArtwork(){
  if(!gallery)return;
  gallery.innerHTML='';
  const classVideos={
-  'Grim Reaper':{src:'https://res.cloudinary.com/oei6mrpf/video/upload/v1793852468/Grim_Reaper.mp4',poster:'https://res.cloudinary.com/oei6mrpf/video/upload/so_0/v1793852468/Grim_Reaper.jpg'},
-  'Bloodstained':{src:'https://res.cloudinary.com/oei6mrpf/video/upload/v1793852468/Bloodstained.mp4',poster:'https://res.cloudinary.com/oei6mrpf/video/upload/so_0/v1793852468/Bloodstained.jpg'},
-  'Viper':{src:'https://res.cloudinary.com/oei6mrpf/video/upload/v1793852468/Viper.mp4',poster:'https://res.cloudinary.com/oei6mrpf/video/upload/so_0/v1793852468/Viper.jpg'},
+  'Grim Reaper':{embed:'https://share.descript.com/embed/oJJFRLQZtde',poster:'https://res.cloudinary.com/oei6mrpf/video/upload/so_0/v1793852468/Grim_Reaper.jpg'},
+  'Bloodstained':{embed:'https://share.descript.com/embed/lrHBDMxJNSM',poster:'https://res.cloudinary.com/oei6mrpf/video/upload/so_0/v1793852468/Bloodstained.jpg'},
+  'Viper':{embed:'https://share.descript.com/embed/pRyOsy2B4n3',poster:'https://res.cloudinary.com/oei6mrpf/video/upload/so_0/v1793852468/Viper.jpg'},
   'Carnage':{src:'https://res.cloudinary.com/oei6mrpf/video/upload/v1793852468/Carnage.mp4',poster:'https://res.cloudinary.com/oei6mrpf/video/upload/so_0/v1793852468/Carnage.jpg'},
   'Akasha':{src:'https://res.cloudinary.com/oei6mrpf/video/upload/v1793852468/Akasha.mp4',poster:'https://res.cloudinary.com/oei6mrpf/video/upload/so_0/v1793852468/Akasha.jpg'}
  };
@@ -348,27 +348,42 @@ function renderClassArtwork(){
   card.setAttribute('tabindex','0');
   card.setAttribute('aria-label',selected?'Selected '+c+' class video':'Select '+c+' class and play video');
   if(selected){
-   const player=document.createElement('video');
-   player.className='class-artwork-video';
-   player.src=video.src;
-   player.poster=video.poster;
-   player.autoplay=true;
-   player.controls=false;
-   player.playsInline=true;
-   player.preload='auto';
-   player.volume=1;
-   player.muted=false;
-   player.addEventListener('volumechange',()=>{if(player.volume!==1)player.volume=1;if(player.muted)player.muted=false;});
-   player.addEventListener('error',()=>{
-    let note=card.querySelector('.class-video-inline-error');
-    if(!note){note=document.createElement('a');note.className='class-video-inline-error';note.textContent='Video unavailable — open directly';note.href=video.src;note.target='_blank';note.rel='noopener noreferrer';note.addEventListener('click',e=>e.stopPropagation());card.appendChild(note);}
-   });
-   card.appendChild(player);
+   let player;
+   if(video.embed){
+    player=document.createElement('iframe');
+    player.className='class-artwork-video';
+    player.src=video.embed;
+    player.title='VAMPIR '+c+' English-dubbed class introduction';
+    player.allow='autoplay; encrypted-media; fullscreen';
+    player.allowFullscreen=true;
+    player.setAttribute('allowfullscreen','');
+    player.setAttribute('loading','eager');
+    player.setAttribute('referrerpolicy','strict-origin-when-cross-origin');
+    player.setAttribute('scrolling','no');
+    card.appendChild(player);
+   }else{
+    player=document.createElement('video');
+    player.className='class-artwork-video';
+    player.src=video.src;
+    player.poster=video.poster;
+    player.autoplay=true;
+    player.controls=false;
+    player.playsInline=true;
+    player.preload='auto';
+    player.volume=1;
+    player.muted=false;
+    player.addEventListener('volumechange',()=>{if(player.volume!==1)player.volume=1;if(player.muted)player.muted=false;});
+    player.addEventListener('error',()=>{
+     let note=card.querySelector('.class-video-inline-error');
+     if(!note){note=document.createElement('a');note.className='class-video-inline-error';note.textContent='Video unavailable — open directly';note.href=video.src;note.target='_blank';note.rel='noopener noreferrer';note.addEventListener('click',e=>e.stopPropagation());card.appendChild(note);}
+    });
+    card.appendChild(player);
+    const playAttempt=player.play();
+    if(playAttempt&&typeof playAttempt.catch==='function')playAttempt.catch(()=>{player.controls=true;});
+   }
    const title=document.createElement('strong');
    title.textContent=c;
    card.appendChild(title);
-   const playAttempt=player.play();
-   if(playAttempt&&typeof playAttempt.catch==='function')playAttempt.catch(()=>{player.controls=true;});
   }else{
    const img=document.createElement('img');
    img.src=video?.poster||CLASS_ICONS[c];
