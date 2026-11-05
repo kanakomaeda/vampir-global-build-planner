@@ -542,7 +542,7 @@ function renderBuildFeedbackCore(){
  else if(unknown||notes.length){status='ALIGNED — REVIEW CAVEATS';statusColor='var(--gold)'}
  if(reviewable===0){status='INSUFFICIENT STAT DATA';statusColor='var(--gold)'}
  const issueHtml=issues.length?'<ul>'+issues.map(v=>'<li><b>'+v.where+': '+v.chosen+'</b> — '+v.why+'</li>').join('')+'</ul>':'<p>No focus mismatch detected from the selected stat categories.</p>';
- const prosHtml=pros.length?'<ul>'+pros.map(v=>'<li>'+v+'</li>').join('')+'</ul>':'<p>Selected Discipline stats are counted in the Stat mix above; no additional category summary is available.</p>';
+ const prosHtml=data.length?'<ul>'+data.map(effect=>'<li>'+effect.effect+'</li>').join('')+'</ul>':'<p>No Discipline Effects are available for this chapter.</p>';
  const notesHtml=notes.length?'<ul>'+notes.map(v=>'<li>'+v+'</li>').join('')+'</ul>':'<p>No additional notes from the selected stat labels.</p>';
  const distribution='Offense '+counts.offense+' • Accuracy '+counts.accuracy+' • Defense/Resistance '+counts.defense+' • EVA '+counts.evasion+(counts.other?' • Unclassified '+counts.other:'');
  out.innerHTML='<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><b style="color:'+statusColor+'">'+status+'</b><span>'+labels[goal]+'</span></div><p><b>Stat mix:</b> '+distribution+'</p><p><b>Pros</b></p>'+prosHtml+'<p><b>Cons / warnings</b></p>'+issueHtml+'<p><b>Additional notes</b></p>'+notesHtml+'<p><b>Focus rule:</b> '+priorities[goal]+'</p>';
