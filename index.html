@@ -164,6 +164,15 @@ a:hover{color:#f0d5a4;border-color:#c6a777}
 .catalog-detail-lines{display:block!important;list-style-type:disc!important;list-style-position:outside!important;margin:7px 0 0!important;padding:0 0 0 20px!important}
 .catalog-detail-lines>.catalog-detail-line{display:list-item!important;list-style-type:disc!important;margin:0 0 3px!important;padding:0!important}
 .catalog-detail-lines>.catalog-detail-line::marker{color:#202633!important;font-size:1em!important}
+
+/* Force visible bullet glyphs for every equipment stat line. */
+.catalog-detail-lines{display:flex!important;flex-direction:column!important;gap:3px!important;list-style:none!important;margin:7px 0 0!important;padding:0!important}
+.catalog-detail-lines>.catalog-detail-line{display:flex!important;align-items:flex-start!important;gap:7px!important;list-style:none!important;margin:0!important;padding:0!important;color:#202633!important;font:500 11.5px/1.45 Arial,Helvetica,sans-serif!important;overflow-wrap:anywhere!important}
+.catalog-detail-lines>.catalog-detail-line::before{content:"•"!important;display:inline-block!important;flex:0 0 10px!important;width:10px!important;color:#202633!important;font:700 14px/1.2 Arial,Helvetica,sans-serif!important;opacity:1!important}
+.catalog-detail-lines>.catalog-detail-line::marker{content:""!important}
+.catalog-detail-lines>.catalog-detail-line.is-muted{color:#8b929c!important}
+.catalog-detail-lines>.catalog-detail-line.is-special{margin-top:2px!important;color:#263c61!important}
+@media(max-width:520px){.catalog-detail-lines>.catalog-detail-line{font-size:10.5px!important}}
 </style></head><body><main class="wrap">
 <header class="hero"><div class="kicker">VAMPIR • CLASS BUILD TOOL</div><p id="heroDesc">Build reference for VAMPIR classes. Select a class, configure Discipline slots, and keep your own build choices. Stat options shown here are explicitly labeled by chapter and source.</p><div class="pills"><span class="pill">Character Stats</span><span class="pill">5 classes</span><span class="pill">Equipment Planner</span><span class="pill">Builds saved in this browser</span></div></header>
 
