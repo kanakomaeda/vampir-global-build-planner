@@ -353,14 +353,15 @@ function renderClassArtwork(){
    player.src=video.src;
    player.poster=video.poster;
    player.autoplay=true;
-   player.controls=true;
+   player.controls=false;
    player.playsInline=true;
    player.preload='auto';
-   player.addEventListener('click',e=>e.stopPropagation());
-   player.addEventListener('keydown',e=>e.stopPropagation());
+   player.volume=1;
+   player.muted=false;
+   player.addEventListener('volumechange',()=>{if(player.volume!==1)player.volume=1;if(player.muted)player.muted=false;});
    player.addEventListener('error',()=>{
     let note=card.querySelector('.class-video-inline-error');
-    if(!note){note=document.createElement('a');note.className='class-video-inline-error';note.textContent='Video unavailable — open directly';note.href=video.src;note.target='_blank';note.rel='noopener noreferrer';card.appendChild(note);}
+    if(!note){note=document.createElement('a');note.className='class-video-inline-error';note.textContent='Video unavailable — open directly';note.href=video.src;note.target='_blank';note.rel='noopener noreferrer';note.addEventListener('click',e=>e.stopPropagation());card.appendChild(note);}
    });
    card.appendChild(player);
    const title=document.createElement('strong');
@@ -380,16 +381,23 @@ function renderClassArtwork(){
    label.textContent=c;
    card.appendChild(label);
   }
-  const select=()=>{
-   if(c===active)return;
+  const selectOrToggle=()=>{
+   if(c===active){
+    const player=card.querySelector('video');
+    if(player){
+     if(player.paused||player.ended){if(player.ended)player.currentTime=0;player.play().catch(()=>{});}
+     else player.pause();
+    }
+    return;
+   }
    saveCurrent();
    active=c;
    activeFeature=null;
    render();
    renderCatalogWeaponOptions();
   };
-  card.addEventListener('click',select);
-  card.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();select();}});
+  card.addEventListener('click',selectOrToggle);
+  card.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();selectOrToggle();}});
   gallery.appendChild(card);
  });
 }
