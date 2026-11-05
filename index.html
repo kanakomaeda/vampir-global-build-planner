@@ -808,6 +808,43 @@ renderAbsolute();
  });
 
 
+
+ // Character Stats: translate the feature description, profile, tabs, group headings,
+ // field prompts, and readable stat labels while preserving standard game abbreviations.
+ const characterStatsTranslations={
+  tl:{
+   "View and record your Default, Damage, Support, and Special stats.":"Tingnan at itala ang iyong Default, Damage, Support, at Special stats.",
+   "CHARACTER PROFILE & STAT SOURCES":"PROFILE NG CHARACTER AT MGA PINAGMULAN NG STAT","Character Profile":"Profile ng Character","Character Level":"Level ng Character","Level Growth":"Paglago ng Level","Enter level":"Ilagay ang level","Enter value":"Ilagay ang value","Increase / Decrease":"Pagtaas / Pagbaba","Boost / Resilience":"Boost / Resilience","Speed":"Bilis","Sustain":"Pagpapanatili","Resource":"Resource","Execution":"Execution","Status Effect":"Status Effect","ATK":"ATK","DEF":"DEF","ACC":"ACC","EVA":"EVA",
+   "Minimum Weapon ATK":"Minimum Weapon ATK","Max Weapon ATK":"Max Weapon ATK","Additional Weapon ATK":"Karagdagang Weapon ATK","Weapon ATK Boost":"Weapon ATK Boost","Common Monster":"Karaniwang Monster","Monster Suppression":"Monster Suppression","Crit Rate":"Crit Rate","Crit Damage Rate":"Crit Damage Rate","Crit Resist Rate":"Crit Resist Rate","Crit Damage Reduction Rate":"Crit Damage Reduction Rate","Cooldown Reduction":"Pagbawas ng Cooldown","Mov SPD Increase Rate":"Pagtaas ng Mov SPD","Max HP":"Max HP","Max MP":"Max MP","Natural HP Recovery Amount":"Dami ng Natural HP Recovery","Natural MP Recovery Amount":"Dami ng Natural MP Recovery","HP Potion Recovery Rate":"HP Potion Recovery Rate","Additional Gold Gain":"Karagdagang Gold Gain","Additional EXP Gain":"Karagdagang EXP Gain","Max Weight Capacity":"Max Weight Capacity","PVP Drain Activation":"PVP Drain Activation","PVP Drain Negation":"PVP Drain Negation","Monster Drain Activation":"Monster Drain Activation","Status Effect Hit Rate":"Status Effect Hit Rate","Status Effect Resist Rate":"Status Effect Resist Rate","Status Effect Dur. Boost":"Status Effect Dur. Boost","Status Effect Dur. Resil.":"Status Effect Dur. Resil."
+  },
+  id:{
+   "View and record your Default, Damage, Support, and Special stats.":"Lihat dan catat stat Default, Damage, Support, dan Special Anda.",
+   "CHARACTER PROFILE & STAT SOURCES":"PROFIL KARAKTER & SUMBER STAT","Character Profile":"Profil Karakter","Character Level":"Level Karakter","Level Growth":"Pertumbuhan Level","Enter level":"Masukkan level","Enter value":"Masukkan nilai","Increase / Decrease":"Peningkatan / Penurunan","Boost / Resilience":"Boost / Resilience","Speed":"Kecepatan","Sustain":"Ketahanan","Resource":"Sumber Daya","Execution":"Eksekusi","Status Effect":"Efek Status",
+   "Minimum Weapon ATK":"Minimum Weapon ATK","Max Weapon ATK":"Max Weapon ATK","Additional Weapon ATK":"Tambahan Weapon ATK","Common Monster":"Monster Umum","Cooldown Reduction":"Pengurangan Cooldown","Mov SPD Increase Rate":"Tingkat Peningkatan Mov SPD","Natural HP Recovery Amount":"Jumlah Pemulihan HP Alami","Natural MP Recovery Amount":"Jumlah Pemulihan MP Alami","Additional Gold Gain":"Tambahan Gold","Additional EXP Gain":"Tambahan EXP","Max Weight Capacity":"Kapasitas Berat Maksimum"
+  },
+  th:{
+   "View and record your Default, Damage, Support, and Special stats.":"ดูและบันทึกค่าสถานะ Default, Damage, Support และ Special ของคุณ",
+   "CHARACTER PROFILE & STAT SOURCES":"โปรไฟล์ตัวละครและแหล่งที่มาของค่าสถานะ","Character Profile":"โปรไฟล์ตัวละคร","Character Level":"เลเวลตัวละคร","Level Growth":"การเติบโตตามเลเวล","Enter level":"กรอกเลเวล","Enter value":"กรอกค่า","Increase / Decrease":"เพิ่ม / ลด","Boost / Resilience":"Boost / Resilience","Speed":"ความเร็ว","Sustain":"การฟื้นฟูและความทนทาน","Resource":"ทรัพยากร","Execution":"การปิดฉาก","Status Effect":"เอฟเฟกต์สถานะ",
+   "Minimum Weapon ATK":"พลังโจมตีอาวุธขั้นต่ำ","Max Weapon ATK":"พลังโจมตีอาวุธสูงสุด","Additional Weapon ATK":"พลังโจมตีอาวุธเพิ่มเติม","Common Monster":"มอนสเตอร์ทั่วไป","Cooldown Reduction":"ลดคูลดาวน์","Mov SPD Increase Rate":"อัตราเพิ่มความเร็วเคลื่อนที่","Natural HP Recovery Amount":"ปริมาณฟื้นฟู HP ตามธรรมชาติ","Natural MP Recovery Amount":"ปริมาณฟื้นฟู MP ตามธรรมชาติ","Additional Gold Gain":"ได้รับ Gold เพิ่มเติม","Additional EXP Gain":"ได้รับ EXP เพิ่มเติม","Max Weight Capacity":"ความจุน้ำหนักสูงสุด"
+  },
+  ja:{
+   "View and record your Default, Damage, Support, and Special stats.":"Default・Damage・Support・Specialのステータスを確認・記録できます。",
+   "CHARACTER PROFILE & STAT SOURCES":"キャラクタープロフィールとステータス情報源","Character Profile":"キャラクタープロフィール","Character Level":"キャラクターレベル","Level Growth":"レベル成長","Enter level":"レベルを入力","Enter value":"数値を入力","Increase / Decrease":"増加 / 減少","Boost / Resilience":"強化 / 耐性","Speed":"速度","Sustain":"回復・耐久","Resource":"リソース","Execution":"処刑","Status Effect":"状態異常",
+   "Minimum Weapon ATK":"最小武器ATK","Max Weapon ATK":"最大武器ATK","Additional Weapon ATK":"追加武器ATK","Common Monster":"一般モンスター","Cooldown Reduction":"クールダウン短縮","Mov SPD Increase Rate":"移動速度上昇率","Natural HP Recovery Amount":"自然HP回復量","Natural MP Recovery Amount":"自然MP回復量","Additional Gold Gain":"追加Gold獲得","Additional EXP Gain":"追加EXP獲得","Max Weight Capacity":"最大重量"
+  },
+  "pt-BR":{
+   "View and record your Default, Damage, Support, and Special stats.":"Consulte e registre seus atributos Default, Damage, Support e Special.",
+   "CHARACTER PROFILE & STAT SOURCES":"PERFIL DO PERSONAGEM E FONTES DOS ATRIBUTOS","Character Profile":"Perfil do Personagem","Character Level":"Nível do Personagem","Level Growth":"Progressão por Nível","Enter level":"Insira o nível","Enter value":"Insira o valor","Increase / Decrease":"Aumento / Redução","Boost / Resilience":"Bônus / Resistência","Speed":"Velocidade","Sustain":"Sustentação","Resource":"Recursos","Execution":"Execução","Status Effect":"Efeito de Status",
+   "Minimum Weapon ATK":"ATK Mínimo da Arma","Max Weapon ATK":"ATK Máximo da Arma","Additional Weapon ATK":"ATK Adicional da Arma","Common Monster":"Monstro Comum","Cooldown Reduction":"Redução de Recarga","Mov SPD Increase Rate":"Taxa de Aumento de Velocidade de Movimento","Natural HP Recovery Amount":"Quantidade de Recuperação Natural de HP","Natural MP Recovery Amount":"Quantidade de Recuperação Natural de MP","Additional Gold Gain":"Ganho Adicional de Gold","Additional EXP Gain":"Ganho Adicional de EXP","Max Weight Capacity":"Capacidade Máxima de Peso"
+  },
+  "pt-PT":{
+   "View and record your Default, Damage, Support, and Special stats.":"Consulte e registe os seus atributos Default, Damage, Support e Special.",
+   "CHARACTER PROFILE & STAT SOURCES":"PERFIL DA PERSONAGEM E FONTES DOS ATRIBUTOS","Character Profile":"Perfil da Personagem","Character Level":"Nível da Personagem","Level Growth":"Progressão por Nível","Enter level":"Introduza o nível","Enter value":"Introduza o valor","Increase / Decrease":"Aumento / Redução","Boost / Resilience":"Bónus / Resistência","Speed":"Velocidade","Sustain":"Sustentação","Resource":"Recursos","Execution":"Execução","Status Effect":"Efeito de Estado",
+   "Minimum Weapon ATK":"ATK Mínimo da Arma","Max Weapon ATK":"ATK Máximo da Arma","Additional Weapon ATK":"ATK Adicional da Arma","Common Monster":"Monstro Comum","Cooldown Reduction":"Redução do Tempo de Recarga","Mov SPD Increase Rate":"Taxa de Aumento da Velocidade de Movimento","Natural HP Recovery Amount":"Quantidade de Recuperação Natural de HP","Natural MP Recovery Amount":"Quantidade de Recuperação Natural de MP","Additional Gold Gain":"Ganho Adicional de Gold","Additional EXP Gain":"Ganho Adicional de EXP","Max Weight Capacity":"Capacidade Máxima de Peso"
+  }
+ };
+ for(const [locale,entries] of Object.entries(characterStatsTranslations))Object.assign(languages[locale],entries);
+
  // Complete missing class-home, hero, and equipment legend translations.
  Object.assign(languages.tl,{
   "Grim Reaper Features":"Mga Feature ng Grim Reaper","Carnage Features":"Mga Feature ng Carnage","Bloodstained Features":"Mga Feature ng Bloodstained","Viper Features":"Mga Feature ng Viper",
