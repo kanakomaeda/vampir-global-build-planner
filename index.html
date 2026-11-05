@@ -82,21 +82,7 @@ a:hover{color:#f0d5a4;border-color:#c6a777}
 @media(max-width:760px){.advisor-lock-grid{grid-template-columns:1fr}.tabs{grid-template-columns:repeat(2,1fr)}.tab:last-child{grid-column:span 2}.wrap{padding:18px 13px 46px}}
 @media(max-width:600px){.hero{padding:23px 19px}.hero p{font-size:16px}.tabs{gap:8px}.tab{min-height:64px;gap:7px}.class-icon{width:38px;height:38px;flex-basis:38px}.tab span{font-size:10px}.card{padding:15px}}
 
-.class-artwork-gallery{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin:18px 0 22px}.class-video-modal{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;padding:18px;background:#050405eF}
-.class-video-modal[hidden]{display:none}
-.class-video-dialog{width:min(900px,100%);max-height:calc(100vh - 36px);overflow:auto;padding:16px;background:linear-gradient(145deg,#211519,#0d0b0c);border:1px solid #8a5b62;border-radius:10px;box-shadow:0 18px 70px #000b}
-.class-video-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
-.class-video-heading h3{margin:0;color:#e9d8c9;font:700 16px Cinzel,serif}
-.class-video-close{width:38px;height:38px;padding:0;font-size:24px;line-height:1;border:1px solid #72505a;background:#160e11;color:#fff;border-radius:6px}
-.class-video-player{display:block;width:100%;max-height:70vh;background:#000;object-fit:contain}
-.class-video-status{color:#d8b9a2;font-size:12px}
-.class-video-open-link{display:inline-block;margin-top:4px}
-
-.class-artwork-card{display:flex;flex-direction:column;gap:8px;min-width:0;padding:10px;text-align:center;text-transform:none;letter-spacing:0;background:linear-gradient(145deg,#211519,#0d0b0c);border:1px solid #49343a}
-.class-artwork-card{width:100%;cursor:pointer;color:inherit;font:inherit;border-radius:6px;appearance:none;-webkit-appearance:none}
-.class-artwork-card:focus-visible{outline:2px solid #d0a878;outline-offset:3px}
-.class-artwork-card img{display:block;width:100%;height:190px;object-fit:contain;object-position:center bottom;background:radial-gradient(ellipse at 50% 80%,#4b1722 0,#130c10 60%,#080809 100%);border:1px solid #3c292e}
-.class-artwork-video{display:block;width:100%;height:190px;min-height:190px;aspect-ratio:auto;object-fit:contain;border:1px solid #3c292e;background:#080809;pointer-events:none;flex:0 0 190px}.class-artwork-card:has(.class-artwork-video){overflow:hidden}.class-artwork-card:has(.class-artwork-video) strong{flex:0 0 auto}@media(max-width:760px){.class-artwork-video{height:150px;min-height:150px;flex-basis:150px}}@media(max-width:480px){.class-artwork-video{height:145px;min-height:145px;flex-basis:145px}}
+.class-artwork-gallery{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin:18px 0 22px}@media(max-width:760px){.class-artwork-video{height:150px;min-height:150px;flex-basis:150px}}@media(max-width:480px){.class-artwork-video{height:145px;min-height:145px;flex-basis:145px}}
 .class-artwork-card strong{font:700 12px Cinzel,serif;letter-spacing:.06em;color:#eee5e1}
 .class-artwork-card[aria-pressed=true]{border-color:#c09a70;box-shadow:inset 0 0 0 1px #a63c4933,0 0 18px #a52a3b22;background:linear-gradient(135deg,#35141c,#160e11)}
 .class-artwork-card:hover{border-color:#a66a70;transform:translateY(-2px)}
@@ -353,44 +339,58 @@ function renderClassArtwork(){
   'Carnage':{src:'https://res.cloudinary.com/oei6mrpf/video/upload/v1793852468/Carnage.mp4',poster:'https://res.cloudinary.com/oei6mrpf/video/upload/so_0/v1793852468/Carnage.jpg'},
   'Akasha':{src:'https://res.cloudinary.com/oei6mrpf/video/upload/v1793852468/Akasha.mp4',poster:'https://res.cloudinary.com/oei6mrpf/video/upload/so_0/v1793852468/Akasha.jpg'}
  };
- let modal=document.getElementById('classVideoModal');
- if(!modal){
-  modal=document.createElement('div');
-  modal.id='classVideoModal';
-  modal.className='class-video-modal';
-  modal.hidden=true;
-  modal.setAttribute('role','dialog');
-  modal.setAttribute('aria-modal','true');
-  modal.setAttribute('aria-labelledby','classVideoModalTitle');
-  modal.innerHTML='<div class="class-video-dialog"><div class="class-video-heading"><h3 id="classVideoModalTitle"></h3><button type="button" class="class-video-close" aria-label="Close video">×</button></div><video class="class-video-player" controls playsinline preload="metadata"></video><p class="class-video-status" role="status" aria-live="polite"></p><a class="class-video-open-link" target="_blank" rel="noopener noreferrer" hidden>Open video directly</a></div>';
-  document.body.appendChild(modal);
-  const close=()=>{const player=modal.querySelector('video');player.pause();player.removeAttribute('src');player.load();modal.hidden=true;};
-  modal.querySelector('.class-video-close').addEventListener('click',close);
-  modal.addEventListener('click',e=>{if(e.target===modal)close()});
-  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!modal.hidden)close()});
- }
- const openVideo=(name,video)=>{const player=modal.querySelector('video');const status=modal.querySelector('.class-video-status');const direct=modal.querySelector('.class-video-open-link');modal.querySelector('#classVideoModalTitle').textContent=name+(name==='Grim Reaper'?' — English Dub':'');status.textContent='';direct.hidden=true;direct.href=video.src;player.pause();player.src=video.src;player.poster=video.poster;player.load();modal.hidden=false;const attempt=player.play();if(attempt&&typeof attempt.catch==='function')attempt.catch(()=>{status.textContent='Press Play to start the video.'});player.onerror=()=>{status.textContent='The embedded player could not load this video. You can try opening it directly.';direct.hidden=false;};};
  classes.forEach(c=>{
   const video=classVideos[c];
-  const card=document.createElement('button');
-  card.type='button';
+  const selected=c===active;
+  const card=document.createElement('div');
   card.className='class-artwork-card';
-  card.setAttribute('aria-pressed',String(c===active));
-  card.setAttribute('aria-label','Select '+c+' and play class video');
-  const img=document.createElement('img');
-  img.src=video?.poster||CLASS_ICONS[c];
-  img.alt=c+' video thumbnail';
-  img.loading='lazy';
-  img.decoding='async';
-  img.addEventListener('error',()=>{if(img.src!==CLASS_ICONS[c]){img.src=CLASS_ICONS[c];img.alt=c+' official VAMPIR class artwork'}else{img.alt='Official artwork unavailable for '+c;img.style.display='none'}},{once:true});
-  card.appendChild(img);
-  const label=document.createElement('strong');
-  label.textContent=c;
-  card.appendChild(label);
-  card.addEventListener('click',()=>{
-   if(c!==active){saveCurrent();active=c;activeFeature=null;render();renderCatalogWeaponOptions();}
-   openVideo(c,video);
-  });
+  card.setAttribute('aria-pressed',String(selected));
+  card.setAttribute('role','button');
+  card.setAttribute('tabindex','0');
+  card.setAttribute('aria-label',selected?'Selected '+c+' class video':'Select '+c+' class and play video');
+  if(selected){
+   const player=document.createElement('video');
+   player.className='class-artwork-video';
+   player.src=video.src;
+   player.poster=video.poster;
+   player.autoplay=true;
+   player.controls=true;
+   player.playsInline=true;
+   player.preload='auto';
+   player.addEventListener('click',e=>e.stopPropagation());
+   player.addEventListener('keydown',e=>e.stopPropagation());
+   player.addEventListener('error',()=>{
+    let note=card.querySelector('.class-video-inline-error');
+    if(!note){note=document.createElement('a');note.className='class-video-inline-error';note.textContent='Video unavailable — open directly';note.href=video.src;note.target='_blank';note.rel='noopener noreferrer';card.appendChild(note);}
+   });
+   card.appendChild(player);
+   const title=document.createElement('strong');
+   title.textContent=c;
+   card.appendChild(title);
+   const playAttempt=player.play();
+   if(playAttempt&&typeof playAttempt.catch==='function')playAttempt.catch(()=>{player.controls=true;});
+  }else{
+   const img=document.createElement('img');
+   img.src=video?.poster||CLASS_ICONS[c];
+   img.alt=c+' video thumbnail';
+   img.loading='lazy';
+   img.decoding='async';
+   img.addEventListener('error',()=>{if(img.src!==CLASS_ICONS[c]){img.src=CLASS_ICONS[c];img.alt=c+' official VAMPIR class artwork'}else{img.alt='Official artwork unavailable for '+c;img.style.display='none'}},{once:true});
+   card.appendChild(img);
+   const label=document.createElement('strong');
+   label.textContent=c;
+   card.appendChild(label);
+  }
+  const select=()=>{
+   if(c===active)return;
+   saveCurrent();
+   active=c;
+   activeFeature=null;
+   render();
+   renderCatalogWeaponOptions();
+  };
+  card.addEventListener('click',select);
+  card.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();select();}});
   gallery.appendChild(card);
  });
 }
