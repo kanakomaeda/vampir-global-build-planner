@@ -807,8 +807,54 @@ renderAbsolute();
  "AVAILABLE NOW":"DISPONÍVEL","FEATURE HUB":"CENTRO DE FUNCIONALIDADES","Discipline Planner":"Planeador de Discipline","Discipline Plan":"Plano de Discipline","Configure your four Discipline Effects and choose one stat for each slot.":"Configure os quatro Discipline Effects e escolha uma estatística para cada slot.","More features":"Mais funcionalidades","Additional tools and class-specific sections can be added here as the planner grows.":"Poderão ser adicionadas ferramentas e secções específicas de cada classe à medida que o planeador evolui.","Coming as the hub expands":"A adicionar à medida que o centro evolui","Open planner →":"Abrir planeador →","Open character stats →":"Abrir estatísticas da personagem →","Open equipment planner →":"Abrir planeador de equipamento →","View and record your Default, Damage, Support, and Special stats.":"Consulte e registe as estatísticas Default, Damage, Support e Special.","Browse Global weapons and equipment separately from your character stat snapshot.":"Consulte armas e equipamento Global separadamente do resumo de estatísticas da personagem.","Discipline Chapter":"Capítulo de Discipline","Chapter":"Capítulo","Selected Chapter 1 build":"Build selecionada do Capítulo 1","Discipline Effect":"Discipline Effect","Slot":"Slot","Available stat options and official appearance rates.":"Opções de estatísticas disponíveis e taxas oficiais de ocorrência.","Build feedback is being prepared. Change a Discipline stat or Build Focus to refresh the assessment.":"A análise da build está a ser preparada. Altere uma estatística de Discipline ou o foco da build para atualizar a avaliação.","Build feedback could not be generated.":"Não foi possível gerar a análise da build.","RECOMMENDED FOR THIS FOCUS":"RECOMENDADO PARA ESTE FOCO","NOT RECOMMENDED":"NÃO RECOMENDADO","ALIGNED — REVIEW CAVEATS":"ALINHADO — REVEJA AS OBSERVAÇÕES","INSUFFICIENT DATA":"DADOS INSUFICIENTES","Stat mix:":"Distribuição de estatísticas:","Pros":"Pontos positivos","Cons / warnings":"Pontos negativos / avisos","Additional notes":"Notas adicionais","Focus rule:":"Regra do foco:","No ACC is selected.":"Não foi selecionado ACC.","No offensive Discipline stat is selected.":"Não foi selecionada uma estatística ofensiva de Discipline.","No DEF, resistance, or EVA is selected.":"Não foi selecionado DEF, resistance ou EVA.","Overall build":"Build geral","Copy":"Copiar","Export":"Exportar","Import":"Importar","Reset":"Repor","Chapter 1":"Capítulo 1","Chapter 2":"Capítulo 2","Chapter 3":"Capítulo 3","Chapter 4":"Capítulo 4","Chapter 5":"Capítulo 5","Chapter 6":"Capítulo 6","Build comparison":"Comparação de builds","Choose another class":"Escolher outra classe","All classes":"Todas as classes","No equipment bonuses added. Select “Add Equipment Stat” to begin.":"Ainda não foram adicionados bónus de equipamento. Selecione “Add Equipment Stat” para começar.","Add Equipment Stat":"Adicionar estatística de equipamento","No equipment stat bonuses entered yet.":"Ainda não foram introduzidos bónus de estatísticas de equipamento."
  });
 
+
+ // Complete missing class-home, hero, and equipment legend translations.
+ Object.assign(languages.tl,{
+  "Grim Reaper Features":"Mga Feature ng Grim Reaper","Carnage Features":"Mga Feature ng Carnage","Bloodstained Features":"Mga Feature ng Bloodstained","Viper Features":"Mga Feature ng Viper",
+  "Explore VAMPIR Global’s classes, game systems, and build-planning features.":"Tuklasin ang mga class, game system, at feature para sa pagpaplano ng build sa VAMPIR Global.",
+  "CLASS BUILD TOOL":"TOOL PARA SA CLASS BUILD",
+  "Legend":"Legend","Normal — karaniwang kulay ng stat.":"Normal — karaniwang kulay ng stat.","Grayed out — kulay-abong stat na nakikita sa screenshot.":"Grayed out — kulay-abong stat na ipinapakita sa screenshot.","No refined substats — walang laman ang refined-substat slot ayon sa screenshot.":"No refined substats — walang laman ang refined-substat slot ayon sa screenshot.",
+  "Rare":"Rare","Heroic":"Heroic","Legendary":"Legendary"
+ });
+ Object.assign(languages.id,{
+  "Grim Reaper Features":"Fitur Grim Reaper","Carnage Features":"Fitur Carnage","Bloodstained Features":"Fitur Bloodstained","Viper Features":"Fitur Viper",
+  "Explore VAMPIR Global’s classes, game systems, and build-planning features.":"Jelajahi class, sistem game, dan fitur perencanaan build VAMPIR Global.",
+  "CLASS BUILD TOOL":"ALAT BUILD CLASS",
+  "Legend":"Keterangan","Normal — karaniwang kulay ng stat.":"Normal — warna stat standar.","Grayed out — kulay-abong stat na nakikita sa screenshot.":"Grayed out — stat berwarna abu-abu yang terlihat pada screenshot.","No refined substats — walang laman ang refined-substat slot ayon sa screenshot.":"No refined substats — slot refined substat kosong sesuai screenshot.",
+  "Rare":"Rare","Heroic":"Heroic","Legendary":"Legendary"
+ });
+ Object.assign(languages.th,{
+  "Grim Reaper Features":"ฟีเจอร์ Grim Reaper","Carnage Features":"ฟีเจอร์ Carnage","Bloodstained Features":"ฟีเจอร์ Bloodstained","Viper Features":"ฟีเจอร์ Viper",
+  "Explore VAMPIR Global’s classes, game systems, and build-planning features.":"สำรวจคลาส ระบบเกม และฟีเจอร์วางแผนบิลด์ของ VAMPIR Global",
+  "CLASS BUILD TOOL":"เครื่องมือสร้างบิลด์คลาส",
+  "Legend":"คำอธิบายสัญลักษณ์","Normal — karaniwang kulay ng stat.":"Normal — สีค่าสถานะปกติ","Grayed out — kulay-abong stat na nakikita sa screenshot.":"Grayed out — ค่าสถานะสีเทาที่แสดงในภาพหน้าจอ","No refined substats — walang laman ang refined-substat slot ayon sa screenshot.":"No refined substats — ช่อง refined substat ว่างตามภาพหน้าจอ",
+  "Rare":"Rare","Heroic":"Heroic","Legendary":"Legendary"
+ });
+ Object.assign(languages.ja,{
+  "Grim Reaper Features":"Grim Reaperの機能","Carnage Features":"Carnageの機能","Bloodstained Features":"Bloodstainedの機能","Viper Features":"Viperの機能",
+  "Explore VAMPIR Global’s classes, game systems, and build-planning features.":"VAMPIR Globalのクラス、ゲームシステム、ビルド計画機能を確認できます。",
+  "CLASS BUILD TOOL":"クラスビルドツール",
+  "Legend":"凡例","Normal — karaniwang kulay ng stat.":"Normal — 通常のステータス色。","Grayed out — kulay-abong stat na nakikita sa screenshot.":"Grayed out — スクリーンショットに表示された灰色のステータス。","No refined substats — walang laman ang refined-substat slot ayon sa screenshot.":"No refined substats — スクリーンショット上でRefined Substatスロットが空です。",
+  "Rare":"Rare","Heroic":"Heroic","Legendary":"Legendary"
+ });
+ Object.assign(languages["pt-BR"],{
+  "Grim Reaper Features":"Recursos de Grim Reaper","Carnage Features":"Recursos de Carnage","Bloodstained Features":"Recursos de Bloodstained","Viper Features":"Recursos de Viper",
+  "Explore VAMPIR Global’s classes, game systems, and build-planning features.":"Explore as classes, os sistemas do jogo e os recursos de planejamento de builds de VAMPIR Global.",
+  "CLASS BUILD TOOL":"FERRAMENTA DE BUILD DE CLASSE",
+  "Legend":"Legenda","Normal — karaniwang kulay ng stat.":"Normal — cor padrão do atributo.","Grayed out — kulay-abong stat na nakikita sa screenshot.":"Grayed out — atributo em cinza exibido na captura de tela.","No refined substats — walang laman ang refined-substat slot ayon sa screenshot.":"No refined substats — slot de refined substats vazio conforme a captura de tela.",
+  "Rare":"Raro","Heroic":"Heroico","Legendary":"Lendário"
+ });
+ Object.assign(languages["pt-PT"],{
+  "Grim Reaper Features":"Funcionalidades de Grim Reaper","Carnage Features":"Funcionalidades de Carnage","Bloodstained Features":"Funcionalidades de Bloodstained","Viper Features":"Funcionalidades de Viper",
+  "Explore VAMPIR Global’s classes, game systems, and build-planning features.":"Explore as classes, os sistemas de jogo e as funcionalidades de planeamento de builds de VAMPIR Global.",
+  "CLASS BUILD TOOL":"FERRAMENTA DE BUILD DE CLASSE",
+  "Legend":"Legenda","Normal — karaniwang kulay ng stat.":"Normal — cor habitual da estatística.","Grayed out — kulay-abong stat na nakikita sa screenshot.":"Grayed out — estatística a cinzento apresentada na captura de ecrã.","No refined substats — walang laman ang refined-substat slot ayon sa screenshot.":"No refined substats — espaço de refined substats vazio, conforme a captura de ecrã.",
+  "Rare":"Raro","Heroic":"Heroico","Legendary":"Lendário"
+ });
+
  const select=document.getElementById('languageSelect'); if(!select)return;
  const originals=new WeakMap();
+ const originalAttributes=new WeakMap();
  function apply(root=document.body){
   const lang=select.value,dict=languages[lang]||{};
   const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);
@@ -820,8 +866,20 @@ renderAbsolute();
    Object.keys(dict).sort((a,b)=>b.length-a.length).forEach(key=>{if(key&&translated.includes(key))translated=translated.split(key).join(dict[key]);});
    node.nodeValue=translated;
   }
-  root.querySelectorAll?.('[aria-label],[title],[placeholder]').forEach(el=>{
-   for(const attr of ['aria-label','title','placeholder']){const val=el.getAttribute(attr);if(val){let translated=val;Object.keys(dict).sort((a,b)=>b.length-a.length).forEach(key=>{if(key&&translated.includes(key))translated=translated.split(key).join(dict[key]);});el.setAttribute(attr,translated);}}
+  const attributeRoot=root.nodeType===Node.ELEMENT_NODE?root:null;
+  const attributeElements=[];
+  if(attributeRoot?.matches?.('[aria-label],[title],[placeholder]'))attributeElements.push(attributeRoot);
+  if(root.querySelectorAll)attributeElements.push(...root.querySelectorAll('[aria-label],[title],[placeholder]'));
+  attributeElements.forEach(el=>{
+   if(!originalAttributes.has(el))originalAttributes.set(el,{});
+   const saved=originalAttributes.get(el);
+   for(const attr of ['aria-label','title','placeholder']){
+    if(!el.hasAttribute(attr))continue;
+    if(!(attr in saved))saved[attr]=el.getAttribute(attr);
+    const original=saved[attr];let translated=original;
+    Object.keys(dict).sort((a,b)=>b.length-a.length).forEach(key=>{if(key&&translated.includes(key))translated=translated.split(key).join(dict[key]);});
+    el.setAttribute(attr,translated);
+   }
   });
   document.documentElement.lang=lang;
  }
