@@ -1126,7 +1126,8 @@ renderAbsolute();
  const originalAttributes=new WeakMap();
  function apply(root=document.body){
   const lang=select.value,dict=languages[lang]||{};
-  const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);
+  if(root.nodeType===Node.ELEMENT_NODE&&root.matches('script,style,noscript'))return;
+  const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode(node){const parent=node.parentElement;if(!parent||parent.closest('script,style,noscript'))return NodeFilter.FILTER_REJECT;return NodeFilter.FILTER_ACCEPT;}});
   let node;while((node=walker.nextNode())){
    if(!node.nodeValue.trim())continue;
    if(!originals.has(node))originals.set(node,node.nodeValue);
@@ -1157,11 +1158,11 @@ renderAbsolute();
   document.documentElement.lang=lang;
  }
  select.value=localStorage.getItem('vampir-language')||'en';
- select.addEventListener('change',()=>{localStorage.setItem('vampir-language',select.value);apply();});
+ select.addEventListener('change',()=>{localStorage.setItem('vampir-language',select.value);apply();if(typeof activeFeature!=='undefined'&&activeFeature==='equipment'&&typeof renderCatalogWeaponOptions==='function')renderCatalogWeaponOptions();});
  window.applyVampirTranslations=()=>apply();
  const observer=new MutationObserver(records=>records.forEach(record=>{
-  if(record.type==='childList')record.addedNodes.forEach(n=>{if(n.nodeType===Node.TEXT_NODE){if(n.parentElement)apply(n.parentElement);}else if(n.nodeType===Node.ELEMENT_NODE)apply(n);});
-  else if(record.type==='characterData'&&record.target.parentElement)apply(record.target.parentElement);
+  if(record.type==='childList')record.addedNodes.forEach(n=>{if(n.nodeType===Node.TEXT_NODE){if(n.parentElement&&!n.parentElement.closest('script,style,noscript'))apply(n.parentElement);}else if(n.nodeType===Node.ELEMENT_NODE&&!n.matches('script,style,noscript'))apply(n);});
+  else if(record.type==='characterData'&&record.target.parentElement&&!record.target.parentElement.closest('script,style,noscript'))apply(record.target.parentElement);
   else if(record.type==='attributes')apply(record.target);
  }));
  observer.observe(document.body,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['aria-label','title','placeholder']});
