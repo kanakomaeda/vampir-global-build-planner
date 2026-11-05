@@ -520,12 +520,11 @@ function renderBuildFeedbackCore(){
  }));
  const focusCategories=goal==='pve'||goal==='boss'?['offense','accuracy']:(goal==='survival'?['defense','evasion']:['offense','accuracy','defense','evasion']);
  const familySummary=kind=>Object.entries(kindFamilyCounts[kind]).map(([name,count])=>name+' × '+count).join(', ');
- if(counts.offense>0)pros.push(counts.offense+' offensive slot(s): '+familySummary('offense')+'.');
- if(counts.accuracy>0)pros.push(counts.accuracy+' accuracy slot(s): '+familySummary('accuracy')+'. These can help when attacks fail to hit; actual value depends on target and hit rate.');
- if(counts.defense>0)pros.push(counts.defense+' defensive/resistance slot(s): '+familySummary('defense')+'.');
- if(counts.evasion>0)pros.push(counts.evasion+' evasion slot(s): '+familySummary('evasion')+'.');
+ const focusPros=goal==='pve'||goal==='boss'?['offense']:(goal==='survival'?['defense','evasion']:(goal==='pvp'?['offense','accuracy','defense','evasion']:['offense','accuracy','defense','evasion']));
+ focusPros.forEach(kind=>{if(counts[kind]>0)pros.push(counts[kind]+' '+({offense:'offensive',accuracy:'accuracy',defense:'defensive/resistance',evasion:'evasion'}[kind])+' slot(s): '+familySummary(kind)+'.');});
  if(counts.offense===0&&(goal==='pve'||goal==='boss'))issues.push({where:'Overall build',chosen:'No offensive stat selected',why:'This build has no offensive Discipline stat for a damage-focused goal.'});
- if((goal==='pve'||goal==='boss')&&counts.accuracy===0)notes.push('No ACC is selected. This is not automatically wrong, but if your attacks miss the intended targets, damage uptime may suffer.');
+ if((goal==='pve'||goal==='boss')&&counts.accuracy>0)notes.push('ACC is a conditional support stat for '+labels[goal]+', not direct damage. Keep it when your attacks miss the intended targets; otherwise, prioritize offensive stats in slots where a stronger damage option is available.');
+ if((goal==='pve'||goal==='boss')&&counts.accuracy===0)notes.push('No ACC is selected. This is not automatically wrong; monitor whether attacks consistently hit your intended targets. If they miss, consider adding relevant ACC without sacrificing more offense than necessary.');
  if(goal==='survival'&&counts.defense+counts.evasion===0)issues.push({where:'Overall build',chosen:'No defensive or evasion stat selected',why:'This build has no DEF, resistance, or EVA emphasis for a survivability goal.'});
  if(goal==='balanced'){
   const present=focusCategories.filter(k=>counts[k]>0).length;
@@ -542,8 +541,9 @@ function renderBuildFeedbackCore(){
  else if(unknown||notes.length){status='ALIGNED — REVIEW CAVEATS';statusColor='var(--gold)'}
  if(reviewable===0){status='INSUFFICIENT STAT DATA';statusColor='var(--gold)'}
  const issueHtml=issues.length?'<ul>'+issues.map(v=>'<li><b>'+v.where+': '+v.chosen+'</b> — '+v.why+'</li>').join('')+'</ul>':'<p>No focus mismatch detected from the selected stat categories.</p>';
- const prosHtml=data.length?'<ul>'+data.map((effect,i)=>effect.slots.map((slot,j)=>{const selectedIndex=builds[buildKey()][i][j]??slot.def;return '<li>'+slot.opts[selectedIndex]+'</li>';}).join('')).join('')+'</ul>':'<p>No Discipline slot stats are available for this chapter.</p>';
- const notesHtml=notes.length?'<ul>'+notes.map(v=>'<li>'+v+'</li>').join('')+'</ul>':'<p>No additional notes from the selected stat labels.</p>';
+ const prosHtml=pros.length?'<ul>'+pros.map(v=>'<li>'+v+'</li>').join('')+'</ul>':'<p>No selected stats currently provide a clear advantage for '+labels[goal]+'. Review the warnings and additional notes before keeping this setup.</p>';
+ if(issues.length)notes.push('The selected build contains '+issues.length+' slot-level or overall focus mismatch(es). The warnings identify which choices are less aligned; change those slots and the Pros/assessment will update.');
+ const notesHtml=notes.length?'<ul>'+notes.map(v=>'<li>'+v+'</li>').join('')+'</ul>':'<p>No additional caveats detected from the available Discipline stat labels. Actual performance still depends on your target and combat situation.</p>';
  const distribution='Offense '+counts.offense+' • Accuracy '+counts.accuracy+' • Defense/Resistance '+counts.defense+' • EVA '+counts.evasion+(counts.other?' • Unclassified '+counts.other:'');
  out.innerHTML='<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><b style="color:'+statusColor+'">'+status+'</b><span>'+labels[goal]+'</span></div><p><b>Stat mix:</b> '+distribution+'</p><p><b>Pros</b></p>'+prosHtml+'<p><b>Cons / warnings</b></p>'+issueHtml+'<p><b>Additional notes</b></p>'+notesHtml+'<p><b>Focus rule:</b> '+priorities[goal]+'</p>';
 }
